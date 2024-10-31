@@ -66,28 +66,24 @@ const taskController = {
       db.run('BEGIN TRANSACTION');
   
       try {
-        // Primeiro, movemos o item sendo arrastado para uma ordem temporária negativa
-        // (assumindo que não teremos ordens negativas no uso normal)
         db.run(
           'UPDATE Tarefas SET ordem = -1 WHERE id = ?',
           [taskId]
         );
   
         if (newOrdem < oldOrdem) {
-          // Movendo para cima
+          
           db.run(
             'UPDATE Tarefas SET ordem = ordem + 1 WHERE ordem >= ? AND ordem < ?',
             [newOrdem, oldOrdem]
           );
         } else {
-          // Movendo para baixo
+          
           db.run(
             'UPDATE Tarefas SET ordem = ordem - 1 WHERE ordem > ? AND ordem <= ?',
             [oldOrdem, newOrdem]
           );
         }
-  
-        // Finalmente, colocamos o item na sua posição final
         db.run(
           'UPDATE Tarefas SET ordem = ? WHERE id = ?',
           [newOrdem, taskId],
