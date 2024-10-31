@@ -1,7 +1,10 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const dbPath = path.resolve(__dirname, '../../../tasks.db');
+const dbPath = process.env.NODE_ENV === 'production'
+  ? path.join('/etc/secrets', 'tasks.db')
+  : path.resolve(__dirname, '../../../tasks.db');
+
 const db = new sqlite3.Database(dbPath);
 
 db.run(`

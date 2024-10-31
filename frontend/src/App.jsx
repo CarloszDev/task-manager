@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://task-manager-3pye.onrender.com'
+  : 'http://localhost:3001';
 
 function App() {
   const [tasks, setTasks] = useState([]);
